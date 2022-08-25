@@ -1,0 +1,93 @@
+plugins {
+    id 'application'
+    id("io.micronaut.library")
+    id("com.github.johnrengelman.shadow")
+}
+
+version "$version"
+group "yauaa.example"
+
+application {
+    mainClassName = "yauaa.example.Application"
+}
+
+dependencies {
+    // Minimum Requirements for a project
+    //-------------------------------------------------------------------------------------
+    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+
+    api(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    api("io.micronaut:micronaut-inject")
+    api("io.micronaut:micronaut-validation")
+    api("io.micronaut:micronaut-runtime")
+    
+    //------------------------------------------------------------------------------------
+
+    // Removes the following warning
+    //warning: unknown enum constant When.MAYBE
+    //  reason: class file for javax.annotation.meta.When not found
+    compileOnlyApi("com.google.code.findbugs:jsr305:3.0.2")
+
+    //Logging
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.11")
+    runtimeOnly("org.codehaus.janino:janino:3.1.7")
+    //-------------------------------------------------------------------------------------
+
+    //Graal VM & Lambda
+    annotationProcessor("io.micronaut:micronaut-graal:3.6.1")
+
+    //Swagger
+    implementation("io.swagger.core.v3:swagger-annotations:2.2.2")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi:4.4.3")
+
+    runtimeOnly("io.micronaut:micronaut-http-server-netty:3.6.1")
+
+    //Yauaa
+    implementation("nl.basjes.parse.useragent:yauaa:7.5.0")
+    runtimeOnly("org.apache.logging.log4j:log4j-to-slf4j:2.18.0")
+    implementation 'commons-logging:commons-logging:1.2'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs.addAll([
+            '-parameters',
+            // enables incremental compilation
+            '-Amicronaut.processing.incremental=true',
+            '-Amicronaut.processing.annotations=yauaa.*',
+            "-Amicronaut.processing.group=$project.group",
+            "-Amicronaut.processing.module=$project.name",
+    ])
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs(
+            '-Dmicronaut.environments=local',
+            '-Denv.ssmparameterstoreenabled=true',
+            '-Denv.ssmparameterstorenamespace=default',
+            '-XX:TieredStopAtLevel=1',
+            '-Dcom.sun.management.jmxremote',
+            '-Dmicronaut.openapi.views.spec=swagger-ui.enabled=true,swagger-ui.theme=flattop'
+    )
+    if (gradle.startParameter.continuous) {
+        systemProperties(
+                'micronaut.io.watch.restart':'true',
+                'micronaut.io.watch.enabled':'true',
+                "micronaut.io.watch.paths":"src/main"
+        )
+    }
+}
+
+task exploded(type: Copy){
+    setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    from sourceSets.main.output
+    into "build/exploded"
+
+    into("lib"){
+        from configurations.compileClasspath
+        from configurations.runtimeClasspath
+    }
+}
+
+shadowJar.dependsOn exploded

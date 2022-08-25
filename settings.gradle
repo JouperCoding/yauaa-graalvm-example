@@ -1,0 +1,2 @@
+rootProject.name = 'yauaa-graalvm-example'
+include 'yauaa-example'

@@ -1,0 +1,25 @@
+plugins {
+    id("io.micronaut.library") version "$micronautLibrary"
+    id("com.github.johnrengelman.shadow") version "$johnrengelmanShadow"
+}
+
+task createProjectWrapper(type: Wrapper) {
+    gradleVersion = "$gradleWrapperVersion"
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    java {
+        sourceCompatibility = JavaVersion.toVersion("11")
+        targetCompatibility = JavaVersion.toVersion("11")
+    }
+
+    tasks.withType(Jar){
+        duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="Logger" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>false</withJansi>
+        <encoder>
+            <pattern>[ %d{YYYY-MM-dd HH:mm:ss.SSS} UTC %d{Z} ] [ %-5level] [ %thread ] [ %class.%M %L ] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Micronaut Logg Levels -->
+    <logger name="io.micronaut.context" level="info" />
+
+    <!-- User Agent Logg Levels -->
+    <logger name="nl.basjes.parse.useragent" level="info" />
+
+    <!-- Yggdrasil Logg Levels -->
+    <logger name="yauaa.example" level="info" />
+
+    <root level="info">
+        <appender-ref ref="Logger" />
+    </root>
+</configuration>

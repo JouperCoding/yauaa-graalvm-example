@@ -1,0 +1,19 @@
+{
+  "resources":{
+  "includes":[
+    {"pattern":"\\QMETA-INF/http/mime.types\\E"},
+    {"pattern":"\\QMETA-INF/swagger/views/swagger-ui/index.html\\E"},
+    {"pattern":"\\QMETA-INF/swagger/yauaa-example-v1.0.yml\\E"},
+    {"pattern":"\\Qapplication.yml\\E"},
+    {"pattern":"\\Qlogback.xml\\E"},
+    {"pattern":"\\Qmicronaut-version.properties\\E"},
+    {"pattern":"\\QUserAgents/\\E"},
+
+    {"pattern":"\\QMETA-INF/services/com.fasterxml.jackson.databind.Module\\E"},
+    {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"},
+    {"pattern":"\\QMETA-INF/services/org.apache.logging.log4j.spi.Provider\\E"},
+    {"pattern":"\\QMETA-INF/services/org.apache.logging.log4j.util.PropertySource\\E"},
+    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
+  ]},
+  "bundles":[]
+}

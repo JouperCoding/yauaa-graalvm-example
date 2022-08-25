@@ -1,0 +1,61 @@
+micronaut:
+  application:
+    name: yauaa-example
+  server:
+    port: -1
+    max-request-size: 10485760
+    cors:
+      enabled: true
+      single-header: true
+      configurations:
+        web:
+          allowedOrigins:
+            - ^http(|s):\/\/(|www\.)(.*?)(|:[0-9]+)$
+          exposedHeaders:
+            - Access-Control-Allow-Headers
+            - Access-Control-Expose-Headers
+            - Access-Control-Allow-Methods
+            - Access-Control-Allow-Origin
+
+  ssl:
+    handshakeTimeout: PT10S
+  http:
+    client:
+      ssl:
+        handshakeTimeout: PT10S
+
+  security:
+    intercept-url-map:
+      - pattern: /swagger/**
+        http-method: GET
+        access:
+          - isAnonymous()
+
+  executors:
+    io:
+      type: fixed
+      nThreads: 75
+
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+        enabled: true
+    versioning:
+      enabled: true
+      default-version: 1
+      parameter:
+        enabled: false
+        names: 'v,api-version'
+      header:
+        enabled: true
+        names:
+          - 'X-Api-Version'
+          - 'Accept-Version'
+jackson:
+  trim-strings: true
+
+logger:
+  levels:
+    root: INFO
