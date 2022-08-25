@@ -4,7 +4,7 @@ http://localhost:[randomPort]/swagger/views/swagger-ui/index.html
 ```
 # Requires GraalVM 22.2.0 + native-image
 
-####Installing with choco
+#### Installing with choco
 ```
 choco install graalvm-java11
 choco install visualstudio2017-workload-vctools
